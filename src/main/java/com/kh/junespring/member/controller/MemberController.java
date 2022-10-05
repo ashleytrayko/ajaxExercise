@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.JsonObject;
 import com.kh.junespring.member.domain.Member;
 import com.kh.junespring.member.service.MemberService;
 
@@ -186,5 +188,18 @@ public class MemberController {
 			mv.addObject("msg",e.toString()).setViewName("common/errorPage");
 		}
 		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/member/checkId.kh", method=RequestMethod.GET)
+	public String checkId(@RequestParam("memberId") String memberId) {
+		Member member = mService.printOneById(memberId);
+		if(member == null) {
+			System.out.println("ok!");
+			return "itsOk";
+		}else {
+			System.out.println("no!");
+			return "itsNotOk";
+		}
 	}
 }

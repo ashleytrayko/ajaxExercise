@@ -69,14 +69,72 @@
 	<br>
 	<p id="p5"></p>
 	<button id="jq-btn5">실행 및 결과확인</button>
+	<h4>6. 서버로 전송값을 보내고 JSONArray로 결과 받아서 처리</h4>
+	<p>유저 번호를 보내서 해당 유저를 가져오고, 없는 경우 전체리스트 가져오기</p>
+	유저 번호 입력 :
+	<input type="text" id="find-num">
+	<br>
+	<p id="p6"></p>
+	<button id="jq-btn6">실행 및 결과확인</button>
+	<h4>7. GSON을 이용한 List 변환</h4>
+	<p>전체리스트 가져오기</p>
+	<p id="p7"></p>
+	<button id="jq-btn7">실행 및 결과확인</button>
 
 	<script>
+		$("#jq-btn7").click(
+				function() {
+					$.ajax({
+						url : "/ajax/ex6.kh",
+						type : "get",
+						success : function(data) {
+							var str = "";
+							console.log(data);
+							for (var i = 0; i < data.length; i++) {
+								str += data[i].memberId + " , "
+										+ data[i].memberPwd + "<br>";
+								$("#p7").html(str);
+							}
+						},
+						error : function() {
+
+						}
+					})
+				})
+		$("#jq-btn6").on(
+				"click",
+				function() {
+					var input = $("#find-num").val();
+					$.ajax({
+						url : "/ajax/ex5.kh",
+						type : "get",
+						data : {
+							"memberId" : input
+						},
+						success : function(data) {
+							var str = "";
+							console.log(data);
+							for (var i = 0; i < data.length; i++) {
+								str += data[i].memberId + " , "
+										+ data[i].memberPwd + "<br>";
+								$("#p6").html(str);
+							}
+
+						},
+						error : function() {
+							console.log("서버 요청 실패");
+						}
+					})
+				})
+
 		$("#jq-btn5").on("click", function() {
 			var input = $("#user-num").val();
 			$.ajax({
 				url : "/ajax/ex4.kh",
 				type : "get",
-				data : {"memberId" : input},
+				data : {
+					"memberId" : input
+				},
 				success : function(result) {
 					console.log(result);
 					$("#p5").html(result.memberPwd)

@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kh.junespring.board.domain.Board;
 import com.kh.junespring.board.domain.Reply;
 import com.kh.junespring.board.service.BoardService;
@@ -344,4 +347,28 @@ public class BoardController {
 		}
 		return mv;
 	}
+	// 댓글관리 - Ajax 버전
+		@ResponseBody
+		@RequestMapping(value="/board/replyAdd.kh", method = RequestMethod.POST)
+		public String boardReplyAdd(@ModelAttribute Reply reply) {
+			reply.setReplyWriter("admin");  // -> 로그인 아이디로 바꿔줌
+			int result = bService.registerReply(reply);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}
+		
+		@ResponseBody
+		@RequestMapping(value="/board/replyList.kh", produces="application/json; charset=utf-8", method=RequestMethod.GET)
+		public String boardReplyList(@RequestParam("boardNo") int boardNo) {
+			int bNo = (boardNo == 0) ? 1 : boardNo;
+			List<Reply> rList = bService.printAllReply(bNo);
+			if(!rList.isEmpty()) {
+				Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd").create();
+				return gson.toJson(rList);
+			}
+			return null;
+		}
 }
