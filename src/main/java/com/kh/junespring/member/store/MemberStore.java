@@ -15,4 +15,6 @@ public interface MemberStore {
 	public int updateMember(SqlSession session, Member member);
 	// deleteMember
 	public int deleteMember(SqlSession session, String memberId);
+	// checkIdDuplicate
+	public int checkDupId(SqlSession session, String memberId);
 }

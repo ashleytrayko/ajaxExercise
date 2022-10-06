@@ -46,5 +46,11 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	@Override
+	public int checkDupId(String memberId) {
+		int result = mStore.checkDupId(session, memberId);
+		return result;
+	}
+
 
 }

@@ -116,7 +116,8 @@
 						var $rWriter = $("<td width='100'>").text(rList[i].replyWriter);
 						var $rContent = $("<td>").text(rList[i].replyContents);
 						var $rCreateDate = $("<td width='100'>").text(rList[i].rCreateDate);
-						var $btnArea = $("<td width='80'>").append("<a href='#'>수정</a>").append("<a href='#'>삭제</a>");
+						var $btnArea = $("<td width='80'>").append("<a href='javascript:void(0);' onclick='modifyView(this,\""+rList[i].replyContents+"\","+rList[i].replyNo+")'>수정</a> ")
+															.append("<a href='javascript:void(0);' onclick='removeReplyAjax("+rList[i].replyNo+")'>삭제</a>");
 						$tr.append($rWriter);
 						$tr.append($rContent);
 						$tr.append($rCreateDate);
@@ -131,7 +132,26 @@
 			}
 		});
 	}
-		
+		function removeReplyAjax(replyNo){
+			if(confirm("댓글을 삭제하시겠습니까?")){
+				$.ajax({
+					url:"/board/replyDelete.kh",
+					data : {"replyNo" : replyNo},
+					type : "get",
+					success : function(data){
+						if(data == "success"){
+							getReplyList();
+						}else{
+							alert("댓글 삭제 실패!");
+						}
+					},
+					error : function(){
+						alert("ajax 통신 오류! 관리자에게 문의해주세요!");
+					}
+				})
+							
+						}
+		}
 		
 		$("#rSubmit").on("click",function(){
 			var refBoardNo = "${board.boardNo }";
@@ -192,13 +212,30 @@
 		function modifyReply(obj, rNo){
 			var inputTag = $(obj).parent().prev().children();
 			var replyContents = inputTag.val();  //$("#modifyInput").val();
-			var $form = $("<form>");
+			$.ajax({
+				url:"/board/replyModify.kh",
+				data:{"replyNo" : rNo,
+						"replyContents" : replyContents},
+				type:"post",
+				success:function(result){
+					if(result == "success"){
+						getReplyList();
+					}else{
+						alert("댓글 수정 실패!");
+					}
+				},
+				error:function(){
+					alert("ajax 통신 실패! 관리자에 문의해주세요.");
+				}
+			})
+			
+			/* var $form = $("<form>");
 			$form.attr("action", "/board/modifyReply.kh");
 			$form.attr("method", "post");
 			$form.append("<input type='hidden' value='"+replyContents+"' name='replyContents'>");
 			$form.append("<input type='hidden' value='"+rNo+"' name='replyNo'>");
 			$form.appendTo("body");
-			$form.submit();
+			$form.submit(); */
 		}
 	</script>
 </body>

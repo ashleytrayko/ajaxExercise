@@ -31,4 +31,7 @@
 	<select id="selectOneById" resultMap="memberResultMap">
 		SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = #{memberId} AND M_STATUS = 'Y'
 	</select>
+	<select id="checkIdDuplicate" resultType="_int">
+		SELECT COUNT(*) FROM MEMBER_TBL WHERE MEMBER_ID = #{memberId} AND M_STATUS = 'Y' 
+	</select>
 </mapper>

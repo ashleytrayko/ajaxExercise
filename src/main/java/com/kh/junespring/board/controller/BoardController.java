@@ -371,4 +371,30 @@ public class BoardController {
 			}
 			return null;
 		}
+		
+		@ResponseBody
+		@RequestMapping(value="/board/replyDelete.kh", method=RequestMethod.GET)
+		public String boardReplyDelete(@RequestParam("replyNo") Integer replyNo) {
+			int result = bService.removeReply(replyNo);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+		}
+		
+		@ResponseBody
+		@RequestMapping(value="/board/replyModify.kh", method=RequestMethod.POST)
+		public String boardReplyModify(
+				//@RequestParam("replyNo") Integer replyNo,
+				//@RequestParam("replyContents") String replyContents
+				@ModelAttribute Reply reply) {
+			int result = bService.modifyReply(reply);
+			if(result > 0) {
+				return "success";
+			}else {
+				return "fail";
+			}
+			
+		}
 }

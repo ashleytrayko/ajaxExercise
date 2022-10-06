@@ -77,24 +77,56 @@ span.error {
 			$("#postcodify_search_button").postcodifyPopUp();
 			$("#memberId").keyup(function(e) {
 				var checkId = e.target.value;
+				if(checkId !== ""){
+					$(".ok").css("display", "none");
+					$(".error").css("display", "none");
+					$.ajax({
+						url : "/member/checkId.kh",
+						data : {
+							"memberId" : checkId
+						},
+						type : "get",
+						success : function(result) {
+							if (result == "itsOk") {
+								$(".ok").css("display","block");
+							} else {
+								$(".error").css("display","block");
+							}
+						},
+						error : function() {
+							alert("서버 통신 에러!");
+						}
+					})
+					
+				}else{
+					$(".ok").css("display", "none");
+					$(".error").css("display", "none");
+				}
+
+			})
+
+			/* $("#memberId").on("blur",function(e) {
+				var checkId = $("#memberId").val();
 				$(".ok").css("display","none");
 				$(".error").css("display","none");
 				$.ajax({
-					url : "/member/checkId.kh",
+					url : "/member/checkId2.kh",
 					data : {"memberId" : checkId},
 					type : "get",
 					success : function(result) {
-						if(result == "itsOk"){
-							$(".ok").css("display","block");
+						if(result == "0"){
+							$(".error").hide();
+							$(".ok").show();
 						}else{
-							$(".error").css("display","block");
+							$(".ok").hide();
+							$(".error").show();
 						}
 					},
 					error : function() {
 						alert("서버 통신 에러!");
 					}
 				})
-			})
+			}) */
 		</script>
 </body>
 </html>

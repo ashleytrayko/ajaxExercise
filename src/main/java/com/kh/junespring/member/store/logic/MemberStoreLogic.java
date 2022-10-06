@@ -41,4 +41,10 @@ public class MemberStoreLogic implements MemberStore {
 		return result;
 	}
 
+	@Override
+	public int checkDupId(SqlSession session, String memberId) {
+		int result = session.selectOne("MemberMapper.checkIdDuplicate", memberId);
+		return result;
+	}
+
 }

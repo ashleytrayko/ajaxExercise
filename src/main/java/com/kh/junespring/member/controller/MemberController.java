@@ -202,4 +202,11 @@ public class MemberController {
 			return "itsNotOk";
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/member/checkId2.kh", method=RequestMethod.GET)
+	public String checkId2(@RequestParam("memberId") String memberId) {
+		int result = mService.checkDupId(memberId);
+		return String.valueOf(result);
+	}
 }
